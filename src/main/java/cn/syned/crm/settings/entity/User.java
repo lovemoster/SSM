@@ -1,8 +1,9 @@
 package cn.syned.crm.settings.entity;
 
-import java.io.Serializable;
 import lombok.Data;
 import org.springframework.stereotype.Component;
+
+import java.io.Serializable;
 
 @Data
 @Component

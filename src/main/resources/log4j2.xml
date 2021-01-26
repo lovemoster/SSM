@@ -7,9 +7,9 @@
     </Appenders>
 
     <Loggers>
-        <Root level="info" includeLocation="true">
+        <Root level="off" includeLocation="true">
             <AppenderRef ref="Console"/>
         </Root>
-        <AsyncLogger name="cn.syned.crm.settings.mapper" level="trace" includeLocation="true"/>
+        <AsyncLogger name="cn.syned.crm.settings.mapper" level="trace"/>
     </Loggers>
 </Configuration>

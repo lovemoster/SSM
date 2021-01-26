@@ -30,10 +30,13 @@
         where id = #{id,jdbcType=CHAR}
     </select>
 
-    <select id="queryAllUsers" resultType="cn.syned.crm.settings.entity.User">
+    <select id="login" resultType="cn.syned.crm.settings.entity.User" parameterType="cn.syned.crm.settings.entity.User">
         select
         <include refid="Base_Column_List"/>
-        from tbl_user
+        from
+        tbl_user
+        where
+        loginAct = #{loginact,jdbcType=VARCHAR} and loginPwd = #{loginpwd,jdbcType=VARCHAR}
     </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
