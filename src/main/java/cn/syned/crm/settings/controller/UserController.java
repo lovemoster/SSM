@@ -1,6 +1,5 @@
 package cn.syned.crm.settings.controller;
 
-import cn.hutool.core.util.StrUtil;
 import cn.syned.crm.commons.exception.UserException;
 import cn.syned.crm.commons.message.UserMessage;
 import cn.syned.crm.commons.vo.UserVo;
@@ -66,6 +65,7 @@ public class UserController {
 
     /**
      * 修改用户密码
+     *
      * @param oldPwd
      * @param newPwd
      * @param confirmPwd

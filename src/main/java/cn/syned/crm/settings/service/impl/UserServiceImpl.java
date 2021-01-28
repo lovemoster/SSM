@@ -11,7 +11,6 @@ import cn.syned.crm.settings.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.jws.soap.SOAPBinding;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Date;
@@ -74,7 +73,7 @@ public class UserServiceImpl implements UserService {
         //查询数据库判断原密码是否正确
         User user = (User) session.getAttribute("user");
         User newUser = userMapper.selectByPrimaryKey(user.getId());
-        if (!newUser.getLoginpwd().equals(SecureUtil.md5(oldPwd))){
+        if (!newUser.getLoginpwd().equals(SecureUtil.md5(oldPwd))) {
             throw new UserException(UserMessage.USER_OLD_PASSWORD_INCORRECT);
         }
         //如果原密码正确则修改密码
@@ -82,7 +81,7 @@ public class UserServiceImpl implements UserService {
         updateUser.setId(user.getId());
         updateUser.setLoginpwd(SecureUtil.md5(newPwd));
         int count = userMapper.updateByPrimaryKeySelective(updateUser);
-        if (count != 1){
+        if (count != 1) {
             throw new UserException(UserMessage.USER_UPDATE_PASSWORD_FAILURE);
         }
     }
