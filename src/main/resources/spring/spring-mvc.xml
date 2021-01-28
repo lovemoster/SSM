@@ -11,11 +11,23 @@
         <mvc:message-converters register-defaults="false">
             <bean id="fastJsonHttpMessageConverter"
                   class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
-                <property name="supportedMediaTypes" value="application/json"/>
+                <property name="supportedMediaTypes">
+                    <list>
+                        <value>text/html;charset=utf-8</value>
+                        <value>application/json;charset=utf-8</value>
+                    </list>
+                </property>
                 <property name="defaultCharset" value="utf-8"/>
             </bean>
         </mvc:message-converters>
     </mvc:annotation-driven>
+
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/workbench/*"/>
+            <bean class="cn.syned.crm.commons.interceptor.UserInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
 
     <mvc:default-servlet-handler/>
 </beans>

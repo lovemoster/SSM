@@ -8,11 +8,14 @@ import java.io.File;
 
 @Controller
 public class ViewController {
-    @GetMapping(path = {"/workbench/{view}", "/workbench/"})
+
+    //======================================Workbench=======================================
+
+    @GetMapping(path = {"/workbench/{view}", "/workbench/", "/workbench/index.html"})
     public String toWorkBenchView(
             @PathVariable(value = "view", required = false) String view) {
         if (view == null) {
-            return "/WEB-INF/workbench/index.html";
+            return "/WEB-INF/workbench/index.jsp";
         }
         return "/WEB-INF/workbench" + File.separator + view;
     }
@@ -23,6 +26,8 @@ public class ViewController {
             @PathVariable("view") String view) {
         return "/WEB-INF/workbench" + File.separator + module + File.separator + view;
     }
+
+    //======================================Settings=======================================
 
     @GetMapping(path = {"/settings/{view}", "/settings/"})
     public String toSettingsView(

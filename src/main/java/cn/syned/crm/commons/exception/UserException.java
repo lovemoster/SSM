@@ -10,7 +10,7 @@ public class UserException extends Exception {
         this.message = message;
     }
 
-    public String getMessage() {
+    public String getMessages() {
         return message.getMessage();
     }
 

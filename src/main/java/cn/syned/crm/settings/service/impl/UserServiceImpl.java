@@ -11,6 +11,9 @@ import cn.syned.crm.settings.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.jws.soap.SOAPBinding;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.Date;
 
 @Service
@@ -20,7 +23,7 @@ public class UserServiceImpl implements UserService {
     private UserMapper userMapper;
 
     @Override
-    public void login(User user) throws UserException {
+    public void login(User user, HttpServletRequest request) throws UserException {
         //判断输入的用户名密码是否为空
         if (StrUtil.isEmpty(user.getLoginact())) {
             //如果用户名为空则抛出异常
@@ -55,5 +58,32 @@ public class UserServiceImpl implements UserService {
             throw new UserException(UserMessage.USER_LOGIN_IP_BLOCKED);
         }
 
+        request.getSession().setAttribute("user", res);
+    }
+
+    @Override
+    public void modifyUserPassword(String oldPwd, String newPwd, String confirmPwd, HttpSession session) throws UserException {
+        //判断用户密码是否为空
+        if (StrUtil.isEmpty(oldPwd) || StrUtil.isEmpty(newPwd) || StrUtil.isEmpty(confirmPwd)) {
+            throw new UserException(UserMessage.USER_LOGIN_PASSWORD_EMPTY);
+        }
+        //判断两次输入的新密码是否一致
+        if (!newPwd.equals(confirmPwd)) {
+            throw new UserException(UserMessage.USER_PASSWORD_INCONSISTENT);
+        }
+        //查询数据库判断原密码是否正确
+        User user = (User) session.getAttribute("user");
+        User newUser = userMapper.selectByPrimaryKey(user.getId());
+        if (!newUser.getLoginpwd().equals(SecureUtil.md5(oldPwd))){
+            throw new UserException(UserMessage.USER_OLD_PASSWORD_INCORRECT);
+        }
+        //如果原密码正确则修改密码
+        User updateUser = new User();
+        updateUser.setId(user.getId());
+        updateUser.setLoginpwd(SecureUtil.md5(newPwd));
+        int count = userMapper.updateByPrimaryKeySelective(updateUser);
+        if (count != 1){
+            throw new UserException(UserMessage.USER_UPDATE_PASSWORD_FAILURE);
+        }
     }
 }

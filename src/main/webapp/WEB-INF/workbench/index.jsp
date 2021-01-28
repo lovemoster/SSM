@@ -1,3 +1,4 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -5,6 +6,7 @@
     <link href="../jquery/bootstrap_3.3.0/css/bootstrap.min.css" type="text/css" rel="stylesheet"/>
     <script type="text/javascript" src="../jquery/jquery-1.11.1-min.js"></script>
     <script type="text/javascript" src="../jquery/bootstrap_3.3.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../layui/layui.js"></script>
     <script type="text/javascript">
 
         //页面加载完毕
@@ -53,12 +55,12 @@
             </div>
             <div class="modal-body">
                 <div style="position: relative; left: 40px;">
-                    姓名：<b>张三</b><br><br>
-                    登录帐号：<b>zhangsan</b><br><br>
+                    姓名：<b>${sessionScope.user.name}</b><br><br>
+                    登录帐号：<b>${sessionScope.user.loginact}</b><br><br>
                     组织机构：<b>1005，市场部，二级部门</b><br><br>
-                    邮箱：<b>zhangsan@bjpowernode.com</b><br><br>
-                    失效时间：<b>2017-02-14 10:10:10</b><br><br>
-                    允许访问IP：<b>127.0.0.1,192.168.100.2</b>
+                    邮箱：<b>${sessionScope.user.email}</b><br><br>
+                    失效时间：<b>${sessionScope.user.expiretime}</b><br><br>
+                    允许访问IP：<b>${sessionScope.user.allowips}</b>
                 </div>
             </div>
             <div class="modal-footer">
@@ -104,8 +106,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal"
-                        onclick="window.location.href='../../login.html';">更新
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="modifyUserPassword()">更新
                 </button>
             </div>
         </div>
@@ -128,7 +129,7 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
                 <button type="button" class="btn btn-primary" data-dismiss="modal"
-                        onclick="window.location.href='../../login.html';">确定
+                        onclick="window.location.href='../user/logout';">确定
                 </button>
             </div>
         </div>
@@ -144,7 +145,10 @@
             <li class="dropdown user-dropdown">
                 <a href="javascript:void(0)" style="text-decoration: none; color: white;" class="dropdown-toggle"
                    data-toggle="dropdown">
-                    <span class="glyphicon glyphicon-user"></span> zhangsan <span class="caret"></span>
+                    <span class="glyphicon glyphicon-user"></span>
+                    ${sessionScope.user.name}
+                    <span class="caret"></span>
+                    &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
                 </a>
                 <ul class="dropdown-menu">
                     <li><a href="../settings/index.html"><span class="glyphicon glyphicon-wrench"></span> 系统设置</a></li>
@@ -234,4 +238,56 @@
 <div id="down" style="height: 30px; width: 100%; position: absolute;bottom: 0px;"></div>
 
 </body>
+<script>
+    let oldPwd = $('#oldPwd');
+    let newPwd = $('#newPwd');
+    let confirmPwd = $('#confirmPwd');
+
+    confirmPwd.blur(function () {
+        if (newPwd.val().trim() !== confirmPwd.val().trim()) {
+            layui.use('layer', function () {
+                let layer = layui.layer;
+                layer.msg('两次密码输入不一致', {icon: 5});
+            });
+            newPwd.val('');
+            confirmPwd.val('');
+        }
+    });
+
+    function modifyUserPassword() {
+        if (newPwd.val().trim() === confirmPwd.val().trim()) {
+            $.ajax({
+                url: '../user/modifyUserPassword',
+                type: 'post',
+                data: {
+                    oldPwd: oldPwd.val().trim(),
+                    newPwd: newPwd.val().trim(),
+                    confirmPwd: confirmPwd.val().trim()
+                },
+                dataType: 'json',
+                success: function (data) {
+                    if (data.code === "001-009") {
+                        layui.use('layer', function () {
+                            let layer = layui.layer;
+                            layer.msg(data.message, {icon: 1});
+                        });
+                    } else {
+                        layui.use('layer', function () {
+                            let layer = layui.layer;
+                            layer.msg(data.message, {icon: 5});
+                        });
+                    }
+                }
+            })
+        } else {
+            layui.use('layer', function () {
+                let layer = layui.layer;
+                layer.msg('两次密码输入不一致', {icon: 5});
+            });
+            newPwd.val('');
+            confirmPwd.val('');
+        }
+    }
+
+</script>
 </html>
