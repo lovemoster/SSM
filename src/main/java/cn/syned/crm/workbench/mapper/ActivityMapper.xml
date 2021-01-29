@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.syned.crm.workbench.mapper.ActivityMapper">
+    <resultMap id="BaseResultMap" type="cn.syned.crm.workbench.entity.Activity">
+        <!--@mbg.generated-->
+        <id column="id" jdbcType="CHAR" property="id"/>
+        <result column="owner" jdbcType="CHAR" property="owner"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="startDate" jdbcType="CHAR" property="startDate"/>
+        <result column="endDate" jdbcType="CHAR" property="endDate"/>
+        <result column="cost" jdbcType="VARCHAR" property="cost"/>
+        <result column="description" jdbcType="VARCHAR" property="description"/>
+        <result column="createTime" jdbcType="CHAR" property="createTime"/>
+        <result column="createBy" jdbcType="VARCHAR" property="createBy"/>
+        <result column="editTime" jdbcType="CHAR" property="editTime"/>
+        <result column="editBy" jdbcType="VARCHAR" property="editBy"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        id, `owner`, `name`, startDate, endDate, cost, description, createTime, createBy,
+        editTime, editBy
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List"/>
+        from tbl_activity
+        where id = #{id,jdbcType=CHAR}
+    </select>
+
+    <select id="selectActivityList" resultType="cn.syned.crm.workbench.entity.Activity">
+        select
+        tbl_activity.id as id, tbl_user.name as owner, tbl_activity.name as name, tbl_activity.startDate as startDate,
+        tbl_activity.endDate as endDate, tbl_activity.cost as cost, tbl_activity.description as description,
+        tbl_activity.createTime as createTime, tbl_activity.createBy as createBy, tbl_activity.editTime as editTime,
+        tbl_activity.editBy as editBy
+        from tbl_activity
+        left join tbl_user
+        on tbl_activity.owner = tbl_user.id
+        <where>
+            <if test="name != null and name != ''">
+                and tbl_activity.name like "%" #{name} "%"
+            </if>
+            <if test="owner != null and owner != ''">
+                and tbl_user.name like "%" #{owner} "%"
+            </if>
+            <if test="startDate != null and startDate != ''">
+                and tbl_activity.startDate like "%" #{startDate} "%"
+            </if>
+            <if test="endDate != null and endDate != ''">
+                and tbl_activity.endDate like "%" #{endDate} "%"
+            </if>
+        </where>
+        order by tbl_activity.createTime desc
+    </select>
+
+    <select id="selectActivityListNum" resultType="java.lang.Integer">
+        select
+        count(tbl_activity.id)
+        from tbl_activity
+        left join tbl_user
+        on tbl_activity.owner = tbl_user.id
+        <where>
+            <if test="name != null and name != ''">
+                and tbl_activity.name like "%" #{name} "%"
+            </if>
+            <if test="owner != null and owner != ''">
+                and tbl_user.name like "%" #{owner} "%"
+            </if>
+            <if test="startDate != null and startDate != ''">
+                and tbl_activity.startDate like "%" #{startDate} "%"
+            </if>
+            <if test="endDate != null and endDate != ''">
+                and tbl_activity.endDate like "%" #{endDate} "%"
+            </if>
+        </where>
+        order by tbl_activity.createTime desc
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+        <!--@mbg.generated-->
+        delete from tbl_activity
+        where id = #{id,jdbcType=CHAR}
+    </delete>
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="cn.syned.crm.workbench.entity.Activity"
+            useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into tbl_activity (id,`owner`, `name`, startDate,
+        endDate, cost, description,
+        createTime, createBy, editTime,
+        editBy)
+        values (#{id,jdbcType=CHAR},#{owner,jdbcType=CHAR}, #{name,jdbcType=VARCHAR}, #{startDate,jdbcType=CHAR},
+        #{endDate,jdbcType=CHAR}, #{cost,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR},
+        #{createTime,jdbcType=CHAR}, #{createBy,jdbcType=VARCHAR}, #{editTime,jdbcType=CHAR},
+        #{editBy,jdbcType=VARCHAR})
+    </insert>
+
+    <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="cn.syned.crm.workbench.entity.Activity"
+            useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into tbl_activity
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="owner != null">
+                `owner`,
+            </if>
+            <if test="name != null">
+                `name`,
+            </if>
+            <if test="startDate != null">
+                startDate,
+            </if>
+            <if test="endDate != null">
+                endDate,
+            </if>
+            <if test="cost != null">
+                cost,
+            </if>
+            <if test="description != null">
+                description,
+            </if>
+            <if test="createTime != null">
+                createTime,
+            </if>
+            <if test="createBy != null">
+                createBy,
+            </if>
+            <if test="editTime != null">
+                editTime,
+            </if>
+            <if test="editBy != null">
+                editBy,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="owner != null">
+                #{owner,jdbcType=CHAR},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="startDate != null">
+                #{startDate,jdbcType=CHAR},
+            </if>
+            <if test="endDate != null">
+                #{endDate,jdbcType=CHAR},
+            </if>
+            <if test="cost != null">
+                #{cost,jdbcType=VARCHAR},
+            </if>
+            <if test="description != null">
+                #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=CHAR},
+            </if>
+            <if test="createBy != null">
+                #{createBy,jdbcType=VARCHAR},
+            </if>
+            <if test="editTime != null">
+                #{editTime,jdbcType=CHAR},
+            </if>
+            <if test="editBy != null">
+                #{editBy,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="cn.syned.crm.workbench.entity.Activity">
+        <!--@mbg.generated-->
+        update tbl_activity
+        <set>
+            <if test="owner != null">
+                `owner` = #{owner,jdbcType=CHAR},
+            </if>
+            <if test="name != null">
+                `name` = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="startdate != null">
+                startDate = #{startdate,jdbcType=CHAR},
+            </if>
+            <if test="enddate != null">
+                endDate = #{enddate,jdbcType=CHAR},
+            </if>
+            <if test="cost != null">
+                cost = #{cost,jdbcType=VARCHAR},
+            </if>
+            <if test="description != null">
+                description = #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="createtime != null">
+                createTime = #{createtime,jdbcType=CHAR},
+            </if>
+            <if test="createby != null">
+                createBy = #{createby,jdbcType=VARCHAR},
+            </if>
+            <if test="edittime != null">
+                editTime = #{edittime,jdbcType=CHAR},
+            </if>
+            <if test="editby != null">
+                editBy = #{editby,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=CHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="cn.syned.crm.workbench.entity.Activity">
+        <!--@mbg.generated-->
+        update tbl_activity
+        set `owner` = #{owner,jdbcType=CHAR},
+        `name` = #{name,jdbcType=VARCHAR},
+        startDate = #{startdate,jdbcType=CHAR},
+        endDate = #{enddate,jdbcType=CHAR},
+        cost = #{cost,jdbcType=VARCHAR},
+        description = #{description,jdbcType=VARCHAR},
+        createTime = #{createtime,jdbcType=CHAR},
+        createBy = #{createby,jdbcType=VARCHAR},
+        editTime = #{edittime,jdbcType=CHAR},
+        editBy = #{editby,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=CHAR}
+    </update>
+</mapper>

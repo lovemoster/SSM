@@ -18,13 +18,32 @@
     <bean id="sqlSessionFactoryBean" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
         <property name="configLocation" value="classpath:mapper/mybatis-config.xml"/>
+
+        <property name="plugins">
+            <array>
+                <bean class="com.github.pagehelper.PageInterceptor">
+                    <!-- 这里的几个配置主要演示如何使用，如果不理解，一定要去掉下面的配置 -->
+                    <property name="properties">
+                        <value>
+                            helperDialect=mariadb
+                            reasonable=true
+                            supportMethodsArguments=true
+                            params=count=countSql
+                            autoRuntimeDialect=true
+                        </value>
+                    </property>
+                </bean>
+            </array>
+        </property>
+
     </bean>
 
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
         <property name="sqlSessionFactoryBeanName" value="sqlSessionFactoryBean"/>
-        <property name="basePackage" value="cn.syned.crm.settings.mapper"/>
+        <property name="basePackage" value="cn.syned.crm.settings.mapper,cn.syned.crm.workbench.mapper"/>
     </bean>
 
     <context:component-scan base-package="cn.syned.crm.settings.entity"/>
     <context:component-scan base-package="cn.syned.crm.settings.service.impl"/>
+    <context:component-scan base-package="cn.syned.crm.workbench.service.impl"/>
 </beans>

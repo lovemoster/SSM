@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -84,5 +85,10 @@ public class UserServiceImpl implements UserService {
         if (count != 1) {
             throw new UserException(UserMessage.USER_UPDATE_PASSWORD_FAILURE);
         }
+    }
+
+    @Override
+    public List<User> queryAllUsers() {
+        return userMapper.selectAllUsers();
     }
 }

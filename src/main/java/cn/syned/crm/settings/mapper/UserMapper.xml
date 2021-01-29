@@ -38,6 +38,10 @@
         where
         loginAct = #{loginact,jdbcType=VARCHAR} and loginPwd = #{loginpwd,jdbcType=VARCHAR}
     </select>
+    <select id="selectAllUsers" resultType="cn.syned.crm.settings.entity.User">
+        select `id`, `name`
+        from tbl_user;
+    </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
         delete

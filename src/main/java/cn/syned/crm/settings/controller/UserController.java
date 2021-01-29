@@ -7,13 +7,11 @@ import cn.syned.crm.settings.entity.User;
 import cn.syned.crm.settings.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @Controller
 public class UserController {
@@ -90,6 +88,15 @@ public class UserController {
             vo.setMessage(e.getMessages());
             return vo;
         }
+        return vo;
+    }
+
+    @GetMapping(path = "/user/queryAllUsers")
+    @ResponseBody
+    public UserVo queryAllUsers() {
+        List<User> userList = userService.queryAllUsers();
+        UserVo vo = new UserVo();
+        vo.setData(userList);
         return vo;
     }
 }
