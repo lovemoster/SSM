@@ -24,7 +24,7 @@ function refresh(pageNum, pageSize) {
             for (let i = 0; i < data.data.length; i++) {
                 let activity = data.data[i];
                 content += "<tr class=\"active\">\n" +
-                    "\t\t\t\t\t\t\t<td><input type=\"checkbox\" /></td>\n" +
+                    "\t\t\t\t\t\t\t<td><input type=\"checkbox\" name='xz' value=" + activity.id + "/></td>\n" +
                     "\t\t\t\t\t\t\t<td><a style=\"text-decoration: none; cursor: pointer;\" onclick=\"window.location.href='detail.html';\">" + activity.name + "</a></td>\n" +
                     "                            <td>" + activity.owner + "</td>\n" +
                     "\t\t\t\t\t\t\t<td>" + activity.startDate + "</td>\n" +
@@ -91,3 +91,15 @@ $('#create-save').click(() => {
         document.getElementById('addForm').reset();
     })
 })
+
+//判断全选框是否被选中
+$('#qx').click(function () {
+    $('input[name=xz]').prop('checked', this.checked);
+})
+
+//判断复选框被选中时全选框的状态
+$('#activityListBody').on('click', $('#input[name=xz]'), function () {
+    $('#qx').prop('checked', $('input[name=xz]').length === $('input[name=xz]:checked').length)
+})
+
+//市场活动删除

@@ -45,10 +45,10 @@
                 and tbl_user.name like "%" #{owner} "%"
             </if>
             <if test="startDate != null and startDate != ''">
-                and tbl_activity.startDate like "%" #{startDate} "%"
+                and tbl_activity.startDate &gt;=#{startDate}
             </if>
             <if test="endDate != null and endDate != ''">
-                and tbl_activity.endDate like "%" #{endDate} "%"
+                and tbl_activity.endDate &lt;=#{endDate}
             </if>
         </where>
         order by tbl_activity.createTime desc
@@ -68,10 +68,10 @@
                 and tbl_user.name like "%" #{owner} "%"
             </if>
             <if test="startDate != null and startDate != ''">
-                and tbl_activity.startDate like "%" #{startDate} "%"
+                and tbl_activity.startDate &gt;=#{startDate}
             </if>
             <if test="endDate != null and endDate != ''">
-                and tbl_activity.endDate like "%" #{endDate} "%"
+                and tbl_activity.endDate &lt;=#{endDate}
             </if>
         </where>
         order by tbl_activity.createTime desc

@@ -58,7 +58,7 @@ public class UserController {
     public String logout(HttpServletRequest request) {
         request.removeAttribute("user");
         request.getSession().invalidate();
-        return "redirect: /";
+        return "redirect:/";
     }
 
     /**

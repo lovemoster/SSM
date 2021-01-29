@@ -9,6 +9,7 @@ public class UserInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         if (request.getSession().getAttribute("user") == null) {
+            response.sendRedirect(request.getServletContext().getContextPath() + "/");
             return false;
         }
         return true;
