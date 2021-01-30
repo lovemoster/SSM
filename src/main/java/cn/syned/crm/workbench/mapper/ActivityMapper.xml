@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.syned.crm.workbench.mapper.ActivityMapper">
+
     <resultMap id="BaseResultMap" type="cn.syned.crm.workbench.entity.Activity">
         <!--@mbg.generated-->
         <id column="id" jdbcType="CHAR" property="id"/>
@@ -82,6 +83,14 @@
         delete from tbl_activity
         where id = #{id,jdbcType=CHAR}
     </delete>
+
+    <delete id="deleteByPrimaryKeys">
+        delete from tbl_activity where 1>1 or id in
+        <foreach collection="array" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
     <insert id="insert" keyColumn="id" keyProperty="id" parameterType="cn.syned.crm.workbench.entity.Activity"
             useGeneratedKeys="true">
         <!--@mbg.generated-->
@@ -175,11 +184,11 @@
             <if test="name != null">
                 `name` = #{name,jdbcType=VARCHAR},
             </if>
-            <if test="startdate != null">
-                startDate = #{startdate,jdbcType=CHAR},
+            <if test="startDate != null">
+                startDate = #{startDate,jdbcType=CHAR},
             </if>
-            <if test="enddate != null">
-                endDate = #{enddate,jdbcType=CHAR},
+            <if test="endDate != null">
+                endDate = #{endDate,jdbcType=CHAR},
             </if>
             <if test="cost != null">
                 cost = #{cost,jdbcType=VARCHAR},
@@ -187,34 +196,35 @@
             <if test="description != null">
                 description = #{description,jdbcType=VARCHAR},
             </if>
-            <if test="createtime != null">
-                createTime = #{createtime,jdbcType=CHAR},
+            <if test="createTime != null">
+                createTime = #{createTime,jdbcType=CHAR},
             </if>
-            <if test="createby != null">
-                createBy = #{createby,jdbcType=VARCHAR},
+            <if test="createBy != null">
+                createBy = #{createBy,jdbcType=VARCHAR},
             </if>
-            <if test="edittime != null">
-                editTime = #{edittime,jdbcType=CHAR},
+            <if test="editTime != null">
+                editTime = #{editTime,jdbcType=CHAR},
             </if>
-            <if test="editby != null">
-                editBy = #{editby,jdbcType=VARCHAR},
+            <if test="editBy != null">
+                editBy = #{editBy,jdbcType=VARCHAR},
             </if>
         </set>
         where id = #{id,jdbcType=CHAR}
     </update>
+
     <update id="updateByPrimaryKey" parameterType="cn.syned.crm.workbench.entity.Activity">
         <!--@mbg.generated-->
         update tbl_activity
         set `owner` = #{owner,jdbcType=CHAR},
         `name` = #{name,jdbcType=VARCHAR},
-        startDate = #{startdate,jdbcType=CHAR},
-        endDate = #{enddate,jdbcType=CHAR},
+        startDate = #{startDate,jdbcType=CHAR},
+        endDate = #{endDate,jdbcType=CHAR},
         cost = #{cost,jdbcType=VARCHAR},
         description = #{description,jdbcType=VARCHAR},
-        createTime = #{createtime,jdbcType=CHAR},
-        createBy = #{createby,jdbcType=VARCHAR},
-        editTime = #{edittime,jdbcType=CHAR},
-        editBy = #{editby,jdbcType=VARCHAR}
+        createTime = #{createTime,jdbcType=CHAR},
+        createBy = #{createBy,jdbcType=VARCHAR},
+        editTime = #{editTime,jdbcType=CHAR},
+        editBy = #{editBy,jdbcType=VARCHAR}
         where id = #{id,jdbcType=CHAR}
     </update>
 </mapper>

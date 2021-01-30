@@ -4,18 +4,16 @@
         <Console name="Console" target="SYSTEM_OUT">
             <PatternLayout pattern="[%-5level] [%d{yyyy-MM-dd HH:mm:ss.SSS}] %t %logger{36} - %msg%n"/>
         </Console>
-        <File name="File" fileName="./log4j2.log">
+        <File name="File" fileName=".\log\log4j2.log">
             <PatternLayout pattern="[%-5level] [%d{yyyy-MM-dd HH:mm:ss.SSS}] %t %logger{36} - %msg%n"/>
         </File>
     </Appenders>
 
     <Loggers>
-        <Root level="off">
+        <Root level="fatal">
             <AppenderRef ref="Console"/>
         </Root>
-        <AsyncLogger name="cn.syned.crm.workbench.mapper" level="trace" includeLocation="true">
-
-        </AsyncLogger>
+        <AsyncLogger name="cn.syned.crm.workbench.mapper" level="trace" includeLocation="true"/>
     </Loggers>
 
 </Configuration>

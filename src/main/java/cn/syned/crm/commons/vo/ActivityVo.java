@@ -10,5 +10,6 @@ public class ActivityVo {
     private Integer totalNum;
     private Integer pageSize;
     private List<Activity> data;
+    private Activity aData;
     private String status;
 }

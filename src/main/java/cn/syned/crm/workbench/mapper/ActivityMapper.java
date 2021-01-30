@@ -8,6 +8,8 @@ public interface ActivityMapper {
 
     int deleteByPrimaryKey(String id);
 
+    int deleteByPrimaryKeys(String[] id);
+
     int insert(Activity record);
 
     int insertSelective(Activity record);

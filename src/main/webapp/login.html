@@ -96,5 +96,8 @@
         }
     }
 
+    if (window.top != window) {
+        window.top.location = window.location;
+    }
 </script>
 </html>
