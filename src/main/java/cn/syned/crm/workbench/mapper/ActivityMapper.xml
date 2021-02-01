@@ -16,24 +16,42 @@
         <result column="editTime" jdbcType="CHAR" property="editTime"/>
         <result column="editBy" jdbcType="VARCHAR" property="editBy"/>
     </resultMap>
+
     <sql id="Base_Column_List">
         <!--@mbg.generated-->
         id, `owner`, `name`, startDate, endDate, cost, description, createTime, createBy,
         editTime, editBy
     </sql>
+
     <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
-        <!--@mbg.generated-->
-        select
-        <include refid="Base_Column_List"/>
+        select tbl_activity.id          as id,
+               tbl_user.name            as owner,
+               tbl_activity.name        as name,
+               tbl_activity.startDate   as startDate,
+               tbl_activity.endDate     as endDate,
+               tbl_activity.cost        as cost,
+               tbl_activity.description as description,
+               tbl_activity.createTime  as createTime,
+               tbl_activity.createBy    as createBy,
+               tbl_activity.editTime    as editTime,
+               tbl_activity.editBy      as editBy
         from tbl_activity
-        where id = #{id,jdbcType=CHAR}
+                 left join tbl_user
+                           on tbl_activity.owner = tbl_user.id
+        WHERE tbl_activity.id = #{id}
     </select>
 
     <select id="selectActivityList" resultType="cn.syned.crm.workbench.entity.Activity">
-        select
-        tbl_activity.id as id, tbl_user.name as owner, tbl_activity.name as name, tbl_activity.startDate as startDate,
-        tbl_activity.endDate as endDate, tbl_activity.cost as cost, tbl_activity.description as description,
-        tbl_activity.createTime as createTime, tbl_activity.createBy as createBy, tbl_activity.editTime as editTime,
+        select tbl_activity.id as id,
+        tbl_user.name as owner,
+        tbl_activity.name as name,
+        tbl_activity.startDate as startDate,
+        tbl_activity.endDate as endDate,
+        tbl_activity.cost as cost,
+        tbl_activity.description as description,
+        tbl_activity.createTime as createTime,
+        tbl_activity.createBy as createBy,
+        tbl_activity.editTime as editTime,
         tbl_activity.editBy as editBy
         from tbl_activity
         left join tbl_user
@@ -46,10 +64,10 @@
                 and tbl_user.name like "%" #{owner} "%"
             </if>
             <if test="startDate != null and startDate != ''">
-                and tbl_activity.startDate &gt;=#{startDate}
+                and tbl_activity.startDate &gt;= #{startDate}
             </if>
             <if test="endDate != null and endDate != ''">
-                and tbl_activity.endDate &lt;=#{endDate}
+                and tbl_activity.endDate &lt;= #{endDate}
             </if>
         </where>
         order by tbl_activity.createTime desc
@@ -109,66 +127,72 @@
         <!--@mbg.generated-->
         insert into tbl_activity
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="owner != null">
+            <if test="id != null and id != ''">
+                `id`,
+            </if>
+            <if test="owner != null and owner != ''">
                 `owner`,
             </if>
-            <if test="name != null">
+            <if test="name != null and name != ''">
                 `name`,
             </if>
-            <if test="startDate != null">
+            <if test="startDate != null and startDate != ''">
                 startDate,
             </if>
-            <if test="endDate != null">
+            <if test="endDate != null and endDate != ''">
                 endDate,
             </if>
-            <if test="cost != null">
+            <if test="cost != null and cost != ''">
                 cost,
             </if>
-            <if test="description != null">
+            <if test="description != null and description != ''">
                 description,
             </if>
-            <if test="createTime != null">
+            <if test="createTime != null and createTime != ''">
                 createTime,
             </if>
-            <if test="createBy != null">
+            <if test="createBy != null and createBy != ''">
                 createBy,
             </if>
-            <if test="editTime != null">
+            <if test="editTime != null and editTime != ''">
                 editTime,
             </if>
-            <if test="editBy != null">
+            <if test="editBy != null and editBy != ''">
                 editBy,
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="owner != null">
+            <if test="id != null and id != ''">
+                #{id,jdbcType=CHAR},
+            </if>
+            <if test="owner != null and owner != ''">
                 #{owner,jdbcType=CHAR},
             </if>
-            <if test="name != null">
+            <if test="name != null and name != ''">
                 #{name,jdbcType=VARCHAR},
             </if>
-            <if test="startDate != null">
+            <if test="startDate != null and startDate != ''">
                 #{startDate,jdbcType=CHAR},
             </if>
-            <if test="endDate != null">
+            <if test="endDate != null and endDate != ''">
                 #{endDate,jdbcType=CHAR},
             </if>
-            <if test="cost != null">
+            <if test="cost != null and cost != ''">
                 #{cost,jdbcType=VARCHAR},
             </if>
-            <if test="description != null">
+            <if test="description != null and description != ''">
                 #{description,jdbcType=VARCHAR},
             </if>
-            <if test="createTime != null">
+            <if test="createTime != null and createTime != ''">
                 #{createTime,jdbcType=CHAR},
             </if>
-            <if test="createBy != null">
+            <if test="createBy != null and createBy != ''">
                 #{createBy,jdbcType=VARCHAR},
             </if>
-            <if test="editTime != null">
+            <if test="editTime != null and editTime != ''">
                 #{editTime,jdbcType=CHAR},
             </if>
-            <if test="editBy != null">
+            <if test="editBy != null and editBy != ''">
                 #{editBy,jdbcType=VARCHAR},
             </if>
         </trim>
@@ -178,34 +202,34 @@
         <!--@mbg.generated-->
         update tbl_activity
         <set>
-            <if test="owner != null">
-                `owner` = #{owner,jdbcType=CHAR},
+            <if test="owner != null and owner != ''">
+                owner = #{owner,jdbcType=CHAR},
             </if>
-            <if test="name != null">
-                `name` = #{name,jdbcType=VARCHAR},
+            <if test="name != null and name != ''">
+                name = #{name,jdbcType=VARCHAR},
             </if>
-            <if test="startDate != null">
+            <if test="startDate != null and startDate != ''">
                 startDate = #{startDate,jdbcType=CHAR},
             </if>
-            <if test="endDate != null">
+            <if test="endDate != null and endDate != ''">
                 endDate = #{endDate,jdbcType=CHAR},
             </if>
-            <if test="cost != null">
+            <if test="cost != null and cost != ''">
                 cost = #{cost,jdbcType=VARCHAR},
             </if>
-            <if test="description != null">
+            <if test="description != null and description != ''">
                 description = #{description,jdbcType=VARCHAR},
             </if>
-            <if test="createTime != null">
+            <if test="createTime != null and createTime != ''">
                 createTime = #{createTime,jdbcType=CHAR},
             </if>
-            <if test="createBy != null">
+            <if test="createBy != null and createBy != ''">
                 createBy = #{createBy,jdbcType=VARCHAR},
             </if>
-            <if test="editTime != null">
+            <if test="editTime != null and editTime != ''">
                 editTime = #{editTime,jdbcType=CHAR},
             </if>
-            <if test="editBy != null">
+            <if test="editBy != null and editBy != ''">
                 editBy = #{editBy,jdbcType=VARCHAR},
             </if>
         </set>

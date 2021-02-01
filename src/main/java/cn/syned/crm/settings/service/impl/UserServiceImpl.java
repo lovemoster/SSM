@@ -22,6 +22,13 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserMapper userMapper;
 
+    /**
+     * 用户登录校验
+     *
+     * @param user    认证的用户对象
+     * @param request 请求
+     * @throws UserException 用户异常
+     */
     @Override
     public void login(User user, HttpServletRequest request) throws UserException {
         //判断输入的用户名密码是否为空
@@ -61,6 +68,15 @@ public class UserServiceImpl implements UserService {
         request.getSession().setAttribute("user", res);
     }
 
+    /**
+     * 用户修改密码业务
+     *
+     * @param oldPwd     原密码
+     * @param newPwd     新密码
+     * @param confirmPwd 确认密码
+     * @param session    当前会话session
+     * @throws UserException 用户异常
+     */
     @Override
     public void modifyUserPassword(String oldPwd, String newPwd, String confirmPwd, HttpSession session) throws UserException {
         //判断用户密码是否为空
@@ -87,6 +103,11 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    /**
+     * 插叙所有用户ID和姓名
+     *
+     * @return 返回用户集合
+     */
     @Override
     public List<User> queryAllUsers() {
         return userMapper.selectAllUsers();

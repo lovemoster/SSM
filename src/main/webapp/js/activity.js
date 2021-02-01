@@ -26,7 +26,7 @@ function refresh(pageNum, pageSize) {
                 let activity = data.data[i];
                 content += "<tr class=\"active\">\n" +
                     "\t\t\t\t\t\t\t<td><input type=\"checkbox\" name='xz' value='" + activity.id + "' /></td>\n" +
-                    "\t\t\t\t\t\t\t<td><a style=\"text-decoration: none; cursor: pointer;\" onclick=\"window.location.href='detail.html';\">" + activity.name + "</a></td>\n" +
+                    "\t\t\t\t\t\t\t<td><a style=\"text-decoration: none; cursor: pointer;\" onclick=\"window.location.href='detail.html?id=" + activity.id + "';\">" + activity.name + "</a></td>\n" +
                     "                            <td>" + activity.owner + "</td>\n" +
                     "\t\t\t\t\t\t\t<td>" + activity.startDate + "</td>\n" +
                     "\t\t\t\t\t\t\t<td>" + activity.endDate + "</td>\n" +
@@ -229,7 +229,10 @@ $('#delete-ActivityItem').click(function () {
                         });
                     }
                 });
+                //刷新页面
                 refresh(globalPageNum, globalPageSize);
+                //取消全选
+                $('#qx').prop('checked', false);
                 //关闭窗口
                 layer.close(index);
             });

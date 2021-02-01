@@ -86,7 +86,6 @@ public class ActivityController {
             vo.setStatus("false");
         } else {
             vo.setStatus("true");
-            vo.setAData(activity);
         }
         return vo;
     }
