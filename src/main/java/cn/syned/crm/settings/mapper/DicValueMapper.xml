@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.syned.crm.settings.mapper.DicValueMapper">
+    <resultMap id="BaseResultMap" type="cn.syned.crm.settings.entity.DicValue">
+        <!--@mbg.generated-->
+        <id column="id" jdbcType="CHAR" property="id"/>
+        <result column="value" jdbcType="VARCHAR" property="value"/>
+        <result column="text" jdbcType="VARCHAR" property="text"/>
+        <result column="orderNo" jdbcType="VARCHAR" property="orderNo"/>
+        <result column="typeCode" jdbcType="VARCHAR" property="typeCode"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        id, `value`, `text`, orderNo, typeCode
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List"/>
+        from tbl_dic_value
+        where id = #{id,jdbcType=CHAR}
+    </select>
+
+    <select id="selectAllDictionaryValue" resultType="cn.syned.crm.settings.entity.DicValue">
+        select
+        <include refid="Base_Column_List"/>
+        from tbl_dic_value ORDER BY tbl_dic_value.typeCode,tbl_dic_value.orderNo
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+        <!--@mbg.generated-->
+        delete from tbl_dic_value
+        where id = #{id,jdbcType=CHAR}
+    </delete>
+
+    <delete id="deleteByPrimaryKeys">
+        delete
+        from tbl_dic_value
+        where id in
+        <foreach collection="array" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+
+    <select id="selectDictionaryValueOrderNo" resultType="java.lang.Integer">
+        select max(orderNo + 0)
+        FROM tbl_dic_value
+        where typeCode = #{typeCode};
+    </select>
+
+    <select id="selectAllDictionaryValueById" resultType="cn.syned.crm.settings.entity.DicValue">
+        select
+        <include refid="Base_Column_List"/>
+        from tbl_dic_value where id = #{id};
+    </select>
+
+    <select id="selectDictionaryValueByTypeCode" resultType="cn.syned.crm.settings.entity.DicValue">
+        select
+        <include refid="Base_Column_List"/>
+        from tbl_dic_value where typeCode = #{typeCode}
+        order by tbl_dic_value.orderNo+0
+    </select>
+
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="cn.syned.crm.settings.entity.DicValue"
+            useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into tbl_dic_value (`value`, `text`, orderNo,
+        typeCode)
+        values (#{value,jdbcType=VARCHAR}, #{text,jdbcType=VARCHAR}, #{orderNo,jdbcType=VARCHAR},
+        #{typeCode,jdbcType=VARCHAR})
+    </insert>
+
+    <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="cn.syned.crm.settings.entity.DicValue"
+            useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into tbl_dic_value
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null and id != ''">
+                `id`,
+            </if>
+            <if test="value != null">
+                `value`,
+            </if>
+            <if test="text != null">
+                `text`,
+            </if>
+            <if test="orderNo != null">
+                orderNo,
+            </if>
+            <if test="typeCode != null">
+                typeCode,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null and id != ''">
+                #{id,jdbcType=CHAR},
+            </if>
+            <if test="value != null">
+                #{value,jdbcType=VARCHAR},
+            </if>
+            <if test="text != null">
+                #{text,jdbcType=VARCHAR},
+            </if>
+            <if test="orderNo != null">
+                #{orderNo,jdbcType=VARCHAR},
+            </if>
+            <if test="typeCode != null">
+                #{typeCode,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="cn.syned.crm.settings.entity.DicValue">
+        <!--@mbg.generated-->
+        update tbl_dic_value
+        <set>
+            <if test="value != null">
+                `value` = #{value,jdbcType=VARCHAR},
+            </if>
+            <if test="text != null">
+                `text` = #{text,jdbcType=VARCHAR},
+            </if>
+            <if test="orderNo != null">
+                orderNo = #{orderNo,jdbcType=VARCHAR},
+            </if>
+            <if test="typeCode != null">
+                typeCode = #{typeCode,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=CHAR}
+    </update>
+
+    <update id="updateByPrimaryKey" parameterType="cn.syned.crm.settings.entity.DicValue">
+        <!--@mbg.generated-->
+        update tbl_dic_value
+        set `value` = #{value,jdbcType=VARCHAR},
+        `text` = #{text,jdbcType=VARCHAR},
+        orderNo = #{orderNo,jdbcType=VARCHAR},
+        typeCode = #{typeCode,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=CHAR}
+    </update>
+</mapper>

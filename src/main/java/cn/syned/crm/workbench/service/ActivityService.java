@@ -16,4 +16,6 @@ public interface ActivityService {
     int editActivity(Activity activity, HttpSession session);
 
     ActivityVo deleteActivity(String id);
+
+    ActivityVo queryActivityByName(String name);
 }

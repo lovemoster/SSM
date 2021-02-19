@@ -96,6 +96,27 @@
         order by tbl_activity.createTime desc
     </select>
 
+    <select id="selectActivityByName" resultType="cn.syned.crm.workbench.entity.Activity">
+        select tbl_activity.id,
+        tbl_user.name as owner,
+        tbl_activity.name,
+        tbl_activity.startDate,
+        tbl_activity.endDate,
+        tbl_activity.cost,
+        tbl_activity.description,
+        tbl_activity.createTime,
+        tbl_activity.createBy,
+        tbl_activity.editTime,
+        tbl_activity.editBy
+        from tbl_activity
+        left join tbl_user on tbl_activity.owner = tbl_user.id
+        <where>
+            <if test="name != null and name != '' ">
+                tbl_activity.name like '%' #{name} '%'
+            </if>
+        </where>
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
         <!--@mbg.generated-->
         delete from tbl_activity

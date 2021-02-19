@@ -1,7 +1,7 @@
 package cn.syned.crm.commons.controller;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
@@ -53,13 +53,13 @@ public class ViewController {
 //        return "/WEB-INF/settings" + File.separator + module + File.separator + submodule + File.separator + view;
 //    }
 
-    @GetMapping(path = "/settings/**")
+    @RequestMapping(path = "/settings/**")
     public String toSettings(HttpServletRequest request) {
         String path = request.getServletPath();
         return "/WEB-INF" + File.separator + path;
     }
 
-    @GetMapping(path = "/workbench/**")
+    @RequestMapping(path = {"/workbench/**"})
     public String toWorkBench(HttpServletRequest request) {
         String path = request.getServletPath();
         return "/WEB-INF" + File.separator + path;

@@ -13,15 +13,6 @@
             src="../../jquery/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
     <script type="text/javascript"
             src="../../jquery/bootstrap-datetimepicker-master/locale/bootstrap-datetimepicker.zh-CN.js"></script>
-
-    <script type="text/javascript">
-
-        $(function () {
-
-
-        });
-
-    </script>
 </head>
 <body>
 
@@ -364,43 +355,28 @@
                 <div class="form-group">
                     <div class="input-group">
                         <div class="input-group-addon">名称</div>
-                        <input class="form-control" type="text">
+                        <input class="form-control" type="text" id="fullname">
                     </div>
                 </div>
 
                 <div class="form-group">
                     <div class="input-group">
                         <div class="input-group-addon">公司</div>
-                        <input class="form-control" type="text">
+                        <input class="form-control" type="text" id="company">
                     </div>
                 </div>
 
                 <div class="form-group">
                     <div class="input-group">
                         <div class="input-group-addon">公司座机</div>
-                        <input class="form-control" type="text">
+                        <input class="form-control" type="text" id="phone">
                     </div>
                 </div>
 
                 <div class="form-group">
                     <div class="input-group">
                         <div class="input-group-addon">线索来源</div>
-                        <select class="form-control">
-                            <option></option>
-                            <option>广告</option>
-                            <option>推销电话</option>
-                            <option>员工介绍</option>
-                            <option>外部介绍</option>
-                            <option>在线商场</option>
-                            <option>合作伙伴</option>
-                            <option>公开媒介</option>
-                            <option>销售邮件</option>
-                            <option>合作伙伴研讨会</option>
-                            <option>内部研讨会</option>
-                            <option>交易会</option>
-                            <option>web下载</option>
-                            <option>web调研</option>
-                            <option>聊天</option>
+                        <select class="form-control" id="source">
                         </select>
                     </div>
                 </div>
@@ -410,7 +386,7 @@
                 <div class="form-group">
                     <div class="input-group">
                         <div class="input-group-addon">所有者</div>
-                        <input class="form-control" type="text">
+                        <input class="form-control" type="text" id="owner">
                     </div>
                 </div>
 
@@ -418,27 +394,19 @@
                 <div class="form-group">
                     <div class="input-group">
                         <div class="input-group-addon">手机</div>
-                        <input class="form-control" type="text">
+                        <input class="form-control" type="text" id="mphone">
                     </div>
                 </div>
 
                 <div class="form-group">
                     <div class="input-group">
                         <div class="input-group-addon">线索状态</div>
-                        <select class="form-control">
-                            <option></option>
-                            <option>试图联系</option>
-                            <option>将来联系</option>
-                            <option>已联系</option>
-                            <option>虚假线索</option>
-                            <option>丢失线索</option>
-                            <option>未联系</option>
-                            <option>需要条件</option>
+                        <select class="form-control" id="state">
                         </select>
                     </div>
                 </div>
 
-                <button type="submit" class="btn btn-default">查询</button>
+                <button type="button" class="btn btn-default" id="searchBtn">查询</button>
 
             </form>
         </div>
@@ -470,29 +438,7 @@
                     <td>线索状态</td>
                 </tr>
                 </thead>
-                <tbody>
-                <tr>
-                    <td><input type="checkbox"/></td>
-                    <td><a style="text-decoration: none; cursor: pointer;"
-                           onclick="window.location.href='detail.html';">李四先生</a></td>
-                    <td>动力节点</td>
-                    <td>010-84846003</td>
-                    <td>12345678901</td>
-                    <td>广告</td>
-                    <td>zhangsan</td>
-                    <td>已联系</td>
-                </tr>
-                <tr class="active">
-                    <td><input type="checkbox"/></td>
-                    <td><a style="text-decoration: none; cursor: pointer;"
-                           onclick="window.location.href='detail.html';">李四先生</a></td>
-                    <td>动力节点</td>
-                    <td>010-84846003</td>
-                    <td>12345678901</td>
-                    <td>广告</td>
-                    <td>zhangsan</td>
-                    <td>已联系</td>
-                </tr>
+                <tbody id="tbody">
                 </tbody>
             </table>
         </div>
@@ -536,4 +482,5 @@
 
 </div>
 </body>
+<script type="application/javascript" src="../../js/workbench/clue.js"></script>
 </html>

@@ -6,7 +6,9 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
     <context:component-scan
-            base-package="cn.syned.crm.settings.controller,cn.syned.crm.workbench.controller,cn.syned.crm.commons.controller"/>
+            base-package="cn.syned.crm.settings.controller,
+            cn.syned.crm.workbench.controller,
+            cn.syned.crm.commons.controller"/>
 
     <mvc:annotation-driven>
         <mvc:message-converters register-defaults="false">
@@ -22,17 +24,22 @@
         </mvc:message-converters>
     </mvc:annotation-driven>
 
-    <mvc:interceptors>
-        <mvc:interceptor>
-            <mvc:mapping path="/workbench/**"/>
-            <bean class="cn.syned.crm.commons.interceptor.UserInterceptor"/>
-        </mvc:interceptor>
-        <mvc:interceptor>
-            <mvc:mapping path="/user/queryAllUsers"/>
-            <mvc:mapping path="/js/**"/>
-            <bean class="cn.syned.crm.commons.interceptor.UserInterceptor"/>
-        </mvc:interceptor>
-    </mvc:interceptors>
+    <!--    <mvc:interceptors>-->
+    <!--        <mvc:interceptor>-->
+    <!--            <mvc:mapping path="/workbench/**"/>-->
+    <!--            <bean class="cn.syned.crm.commons.interceptor.UserInterceptor"/>-->
+    <!--        </mvc:interceptor>-->
+    <!--        <mvc:interceptor>-->
+    <!--            <mvc:mapping path="/user/queryAllUsers"/>-->
+    <!--            <mvc:mapping path="/js/**"/>-->
+    <!--            <bean class="cn.syned.crm.commons.interceptor.UserInterceptor"/>-->
+    <!--        </mvc:interceptor>-->
+    <!--        <mvc:interceptor>-->
+    <!--            <mvc:mapping path="/settings/**"/>-->
+    <!--            <bean class="cn.syned.crm.commons.interceptor.UserInterceptor"/>-->
+    <!--        </mvc:interceptor>-->
+    <!--    </mvc:interceptors>-->
 
     <mvc:default-servlet-handler/>
+
 </beans>

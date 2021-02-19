@@ -90,9 +90,27 @@ public class ActivityController {
         return vo;
     }
 
+    /**
+     * 删除市场活动记录
+     *
+     * @param id 要删除条目的UUID
+     * @return
+     */
     @PostMapping(path = "/activity/deleteActivity")
     @ResponseBody
     public ActivityVo deleteActivity(@RequestParam(name = "id") String id) {
         return activityService.deleteActivity(id);
+    }
+
+    /**
+     * 根据市场活动名称查询市场活动
+     *
+     * @param name 市场活动名称
+     * @return
+     */
+    @GetMapping(path = "/activity/queryActivityByName")
+    @ResponseBody
+    public ActivityVo queryActivityByName(@RequestParam(name = "name") String name) {
+        return activityService.queryActivityByName(name);
     }
 }

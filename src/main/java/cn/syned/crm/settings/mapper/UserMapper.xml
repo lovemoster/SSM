@@ -43,6 +43,13 @@
         from tbl_user;
     </select>
 
+    <select id="selectUserByLikeName" resultType="cn.syned.crm.settings.entity.User">
+        select
+        <include refid="Base_Column_List"/>
+        from tbl_user
+        where name like '%' #{name} '%'
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
         delete
         from tbl_user

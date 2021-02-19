@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.syned.crm.workbench.mapper.ClueMapper">
+
+    <resultMap id="BaseResultMap" type="cn.syned.crm.workbench.entity.Clue">
+        <!--@mbg.generated-->
+        <id column="id" jdbcType="CHAR" property="id"/>
+        <result column="fullname" jdbcType="VARCHAR" property="fullname"/>
+        <result column="appellation" jdbcType="VARCHAR" property="appellation"/>
+        <result column="owner" jdbcType="CHAR" property="owner"/>
+        <result column="company" jdbcType="VARCHAR" property="company"/>
+        <result column="job" jdbcType="VARCHAR" property="job"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="phone" jdbcType="VARCHAR" property="phone"/>
+        <result column="website" jdbcType="VARCHAR" property="website"/>
+        <result column="mphone" jdbcType="VARCHAR" property="mphone"/>
+        <result column="state" jdbcType="VARCHAR" property="state"/>
+        <result column="source" jdbcType="VARCHAR" property="source"/>
+        <result column="createBy" jdbcType="VARCHAR" property="createBy"/>
+        <result column="createTime" jdbcType="CHAR" property="createTime"/>
+        <result column="editBy" jdbcType="VARCHAR" property="editBy"/>
+        <result column="editTime" jdbcType="CHAR" property="editTime"/>
+        <result column="description" jdbcType="VARCHAR" property="description"/>
+        <result column="contactSummary" jdbcType="VARCHAR" property="contactSummary"/>
+        <result column="nextContactTime" jdbcType="CHAR" property="nextContactTime"/>
+        <result column="address" jdbcType="VARCHAR" property="address"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        id, fullname, appellation, `owner`, company, job, email, phone, website, mphone,
+        `state`, `source`, createBy, createTime, editBy, editTime, description, contactSummary,
+        nextContactTime, address
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select tbl_clue.id              as id,
+               tbl_clue.fullname        as fullname,
+               tbl_dic_value.text       as appellation,
+               tbl_user.name            as owner,
+               tbl_clue.company         as company,
+               tbl_clue.job             as job,
+               tbl_clue.email           as email,
+               tbl_clue.phone           as phone,
+               tbl_clue.website         as website,
+               tbl_clue.mphone          as mphone,
+               tbl_clue.state           as state,
+               tbl_clue.source          as source,
+               tbl_clue.createBy        as createBy,
+               tbl_clue.createTime      as createTime,
+               tbl_clue.editBy          as editBy,
+               tbl_clue.editTime        as editTime,
+               tbl_clue.description     as description,
+               tbl_clue.contactSummary  as contactSummary,
+               tbl_clue.nextContactTime as nextContactTime,
+               tbl_clue.address         as address
+        from tbl_clue
+                 left join tbl_dic_value
+                           on tbl_clue.appellation = tbl_dic_value.id
+                 left join tbl_user
+                           on tbl_clue.owner = tbl_user.id
+        where tbl_clue.id = #{id}
+    </select>
+
+    <select id="selectClueList" resultType="cn.syned.crm.workbench.entity.Clue">
+        select tbl_clue.id as id,
+        tbl_clue.fullname as fullname,
+        c.text as appellation,
+        tbl_clue.company as company,
+        tbl_clue.phone as phone,
+        tbl_clue.mphone as mphone,
+        a.text as source,
+        tbl_user.name as owner,
+        b.text as state
+        from tbl_clue
+        left outer join tbl_user
+        on tbl_clue.owner = tbl_user.id
+        left outer join tbl_dic_value as a
+        on tbl_clue.source = a.id
+        left outer join tbl_dic_value as b
+        on tbl_clue.state = b.id
+        left outer join tbl_dic_value as c
+        on tbl_clue.appellation = c.id
+        <where>
+            <if test="clue.fullname != null and clue.fullname != ''">
+                and tbl_clue.fullname like '%' #{clue.fullname} '%'
+            </if>
+            <if test="clue.company != null and clue.company != ''">
+                and tbl_clue.company like '%' #{clue.company} '%'
+            </if>
+            <if test="clue.source != null and clue.source != ''">
+                and tbl_clue.source = #{clue.source}
+            </if>
+            <if test="ownerList != null and ownerList != ''">
+                and tbl_clue.owner in
+                <foreach collection="ownerList" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="clue.mphone != null and clue.mphone != ''">
+                and tbl_clue.mphone like '%' #{clue.mphone} '%'
+            </if>
+            <if test="clue.state != null and clue.state != ''">
+                and tbl_clue.state = #{clue.state}
+            </if>
+        </where>
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+        <!--@mbg.generated-->
+        delete from tbl_clue
+        where id = #{id,jdbcType=CHAR}
+    </delete>
+
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="cn.syned.crm.workbench.entity.Clue"
+            useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into tbl_clue (fullname, appellation, `owner`,
+        company, job, email,
+        phone, website, mphone,
+        `state`, `source`, createBy,
+        createTime, editBy, editTime,
+        description, contactSummary, nextContactTime,
+        address)
+        values (#{fullname,jdbcType=VARCHAR}, #{appellation,jdbcType=VARCHAR}, #{owner,jdbcType=CHAR},
+        #{company,jdbcType=VARCHAR}, #{job,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR},
+        #{phone,jdbcType=VARCHAR}, #{website,jdbcType=VARCHAR}, #{mphone,jdbcType=VARCHAR},
+        #{state,jdbcType=VARCHAR}, #{source,jdbcType=VARCHAR}, #{createBy,jdbcType=VARCHAR},
+        #{createTime,jdbcType=CHAR}, #{editBy,jdbcType=VARCHAR}, #{editTime,jdbcType=CHAR},
+        #{description,jdbcType=VARCHAR}, #{contactSummary,jdbcType=VARCHAR}, #{nextContactTime,jdbcType=CHAR},
+        #{address,jdbcType=VARCHAR})
+    </insert>
+
+    <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="cn.syned.crm.workbench.entity.Clue"
+            useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into tbl_clue
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="fullname != null">
+                fullname,
+            </if>
+            <if test="appellation != null">
+                appellation,
+            </if>
+            <if test="owner != null">
+                `owner`,
+            </if>
+            <if test="company != null">
+                company,
+            </if>
+            <if test="job != null">
+                job,
+            </if>
+            <if test="email != null">
+                email,
+            </if>
+            <if test="phone != null">
+                phone,
+            </if>
+            <if test="website != null">
+                website,
+            </if>
+            <if test="mphone != null">
+                mphone,
+            </if>
+            <if test="state != null">
+                `state`,
+            </if>
+            <if test="source != null">
+                `source`,
+            </if>
+            <if test="createBy != null">
+                createBy,
+            </if>
+            <if test="createTime != null">
+                createTime,
+            </if>
+            <if test="editBy != null">
+                editBy,
+            </if>
+            <if test="editTime != null">
+                editTime,
+            </if>
+            <if test="description != null">
+                description,
+            </if>
+            <if test="contactSummary != null">
+                contactSummary,
+            </if>
+            <if test="nextContactTime != null">
+                nextContactTime,
+            </if>
+            <if test="address != null">
+                address,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="fullname != null">
+                #{fullname,jdbcType=VARCHAR},
+            </if>
+            <if test="appellation != null">
+                #{appellation,jdbcType=VARCHAR},
+            </if>
+            <if test="owner != null">
+                #{owner,jdbcType=CHAR},
+            </if>
+            <if test="company != null">
+                #{company,jdbcType=VARCHAR},
+            </if>
+            <if test="job != null">
+                #{job,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null">
+                #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null">
+                #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="website != null">
+                #{website,jdbcType=VARCHAR},
+            </if>
+            <if test="mphone != null">
+                #{mphone,jdbcType=VARCHAR},
+            </if>
+            <if test="state != null">
+                #{state,jdbcType=VARCHAR},
+            </if>
+            <if test="source != null">
+                #{source,jdbcType=VARCHAR},
+            </if>
+            <if test="createBy != null">
+                #{createBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=CHAR},
+            </if>
+            <if test="editBy != null">
+                #{editBy,jdbcType=VARCHAR},
+            </if>
+            <if test="editTime != null">
+                #{editTime,jdbcType=CHAR},
+            </if>
+            <if test="description != null">
+                #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="contactSummary != null">
+                #{contactSummary,jdbcType=VARCHAR},
+            </if>
+            <if test="nextContactTime != null">
+                #{nextContactTime,jdbcType=CHAR},
+            </if>
+            <if test="address != null">
+                #{address,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="cn.syned.crm.workbench.entity.Clue">
+        <!--@mbg.generated-->
+        update tbl_clue
+        <set>
+            <if test="fullname != null">
+                fullname = #{fullname,jdbcType=VARCHAR},
+            </if>
+            <if test="appellation != null">
+                appellation = #{appellation,jdbcType=VARCHAR},
+            </if>
+            <if test="owner != null">
+                `owner` = #{owner,jdbcType=CHAR},
+            </if>
+            <if test="company != null">
+                company = #{company,jdbcType=VARCHAR},
+            </if>
+            <if test="job != null">
+                job = #{job,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null">
+                email = #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null">
+                phone = #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="website != null">
+                website = #{website,jdbcType=VARCHAR},
+            </if>
+            <if test="mphone != null">
+                mphone = #{mphone,jdbcType=VARCHAR},
+            </if>
+            <if test="state != null">
+                `state` = #{state,jdbcType=VARCHAR},
+            </if>
+            <if test="source != null">
+                `source` = #{source,jdbcType=VARCHAR},
+            </if>
+            <if test="createBy != null">
+                createBy = #{createBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                createTime = #{createTime,jdbcType=CHAR},
+            </if>
+            <if test="editBy != null">
+                editBy = #{editBy,jdbcType=VARCHAR},
+            </if>
+            <if test="editTime != null">
+                editTime = #{editTime,jdbcType=CHAR},
+            </if>
+            <if test="description != null">
+                description = #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="contactSummary != null">
+                contactSummary = #{contactSummary,jdbcType=VARCHAR},
+            </if>
+            <if test="nextContactTime != null">
+                nextContactTime = #{nextContactTime,jdbcType=CHAR},
+            </if>
+            <if test="address != null">
+                address = #{address,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=CHAR}
+    </update>
+
+    <update id="updateByPrimaryKey" parameterType="cn.syned.crm.workbench.entity.Clue">
+        <!--@mbg.generated-->
+        update tbl_clue
+        set fullname = #{fullname,jdbcType=VARCHAR},
+        appellation = #{appellation,jdbcType=VARCHAR},
+        `owner` = #{owner,jdbcType=CHAR},
+        company = #{company,jdbcType=VARCHAR},
+        job = #{job,jdbcType=VARCHAR},
+        email = #{email,jdbcType=VARCHAR},
+        phone = #{phone,jdbcType=VARCHAR},
+        website = #{website,jdbcType=VARCHAR},
+        mphone = #{mphone,jdbcType=VARCHAR},
+        `state` = #{state,jdbcType=VARCHAR},
+        `source` = #{source,jdbcType=VARCHAR},
+        createBy = #{createBy,jdbcType=VARCHAR},
+        createTime = #{createTime,jdbcType=CHAR},
+        editBy = #{editBy,jdbcType=VARCHAR},
+        editTime = #{editTime,jdbcType=CHAR},
+        description = #{description,jdbcType=VARCHAR},
+        contactSummary = #{contactSummary,jdbcType=VARCHAR},
+        nextContactTime = #{nextContactTime,jdbcType=CHAR},
+        address = #{address,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=CHAR}
+    </update>
+
+</mapper>

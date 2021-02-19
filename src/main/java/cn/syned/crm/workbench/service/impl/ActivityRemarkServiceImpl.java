@@ -17,8 +17,12 @@ import java.util.List;
 @Service
 public class ActivityRemarkServiceImpl implements ActivityRemarkService {
 
-    @Autowired
     private ActivityRemarkMapper activityRemarkMapper;
+
+    @Autowired
+    public void setActivityRemarkMapper(ActivityRemarkMapper activityRemarkMapper) {
+        this.activityRemarkMapper = activityRemarkMapper;
+    }
 
     @Override
     public ActivityRemarkVo queryActivityRemark(String activityId) {

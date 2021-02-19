@@ -38,17 +38,42 @@
             <td>描述</td>
         </tr>
         </thead>
-        <tbody>
-        <tr class="active">
-            <td><input type="checkbox"/></td>
-            <td>1</td>
-            <td>sex</td>
-            <td>性别</td>
-            <td>性别包括男和女</td>
-        </tr>
+        <tbody id="type-tbody">
+        <!--        <tr class="active">-->
+        <!--            <td><input type="checkbox"/></td>-->
+        <!--            <td>1</td>-->
+        <!--            <td>sex</td>-->
+        <!--            <td>性别</td>-->
+        <!--            <td>性别包括男和女</td>-->
+        <!--        </tr>-->
         </tbody>
     </table>
 </div>
-
+<script>
+    //获取数据字典类型值
+    $.ajax({
+        url: 'queryAllDictionaryType',
+        dataType: 'json',
+        success: function (data) {
+            if (data.code === 200) {
+                let content = "";
+                $.each(data.data, function (index, item) {
+                    if (index % 2 === 1) {
+                        content += '<tr class="active">';
+                    } else {
+                        content += '<tr>';
+                    }
+                    content += '<td><input type="checkbox"/></td>';
+                    content += '<td>' + (index + 1) + '</td>';
+                    content += '<td>' + item.code + '</td>';
+                    content += '<td>' + item.name + '</td>';
+                    content += '<td>' + item.description + '</td>';
+                    content += '</tr>';
+                })
+                $('#type-tbody').append(content);
+            }
+        }
+    })
+</script>
 </body>
 </html>

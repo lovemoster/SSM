@@ -23,4 +23,6 @@ public interface ActivityMapper {
     List<Activity> selectActivityList(Activity activity);
 
     Integer selectActivityListNum(Activity activity);
+
+    List<Activity> selectActivityByName(String name);
 }

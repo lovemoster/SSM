@@ -53,6 +53,8 @@ public class ActivityRemarkController {
     }
 
     /**
+     * 删除市场活动备注
+     *
      * @param id
      * @return
      */

@@ -79,4 +79,13 @@ public class ActivityServiceImpl implements ActivityService {
         }
         return activityVo;
     }
+
+    @Override
+    public ActivityVo queryActivityByName(String name) {
+        List<Activity> activityList = activityMapper.selectActivityByName(name);
+        ActivityVo activityVo = new ActivityVo();
+        activityVo.setStatus("true");
+        activityVo.setData(activityList);
+        return activityVo;
+    }
 }

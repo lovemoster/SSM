@@ -9,13 +9,14 @@
 
     <script type="text/javascript" src="../../../jquery/jquery-1.11.1-min.js"></script>
     <script type="text/javascript" src="../../../jquery/bootstrap_3.3.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../layui/layui.js"></script>
 </head>
 <body>
 
 <div style="position:  relative; left: 30px;">
     <h3>修改字典值</h3>
     <div style="position: relative; top: -40px; left: 70%;">
-        <button type="button" class="btn btn-primary">更新</button>
+        <button type="button" class="btn btn-primary" onclick="Edit()">更新</button>
         <button type="button" class="btn btn-default" onclick="window.history.back();">取消</button>
     </div>
     <hr style="position: relative; top: -40px;">
@@ -53,4 +54,70 @@
 
 <div style="height: 200px;"></div>
 </body>
+<script>
+    //定义保存URL查询参数的Map
+    const queryStringMap = new Map();
+
+    //获取URL查询参数
+    function getQueryString() {
+        //获取URL地址
+        let url = location.search.toString();
+        //判断有没有查询参数
+        if (url === '') {
+            return false;
+        }
+        //获取URL地址后面的查询参数，并转换为数组
+        let queryString = url.split('?')[1].split("&");
+        //遍历数组将参数放入Map中
+        for (let i = 0; i < queryString.length; i++) {
+            queryStringMap.set(queryString[i].split('=')[0], queryString[i].split('=')[1]);
+        }
+    }
+
+    //获取Map
+    getQueryString();
+    //通过id号查询页面数据
+    $.ajax({
+        url: 'queryAllDictionaryValueById',
+        method: 'get',
+        data: {
+            id: queryStringMap.get('id'),
+        },
+        dataType: 'json',
+        success: function (data) {
+            $('#edit-dicTypeCode').val(data.data[0].typeCode);
+            $('#edit-dicValue').val(data.data[0].value);
+            $('#edit-text').val(data.data[0].text);
+            $('#edit-orderNo').val(data.data[0].orderNo);
+        }
+    });
+
+    function Edit() {
+        $.ajax({
+            url: 'updateDictionaryValueById',
+            method: 'post',
+            data: {
+                id: queryStringMap.get('id'),
+                typeCode: $('#edit-dicTypeCode').val(),
+                value: $('#edit-dicValue').val(),
+                text: $('#edit-text').val(),
+                orderNo: $('#edit-orderNo').val()
+            },
+            dataType: 'json',
+            success: function (data) {
+                layui.use('layer', function () {
+                    let layer = layui.layer;
+                    if (data.code === 200) {
+                        layer.msg('修改成功', {icon: 1});
+                        setTimeout(function () {
+                            location.href = 'index.html';
+                        }, 1000);
+                    } else {
+                        layer.msg('添加失败', {icon: 5});
+                    }
+                });
+            }
+        });
+    }
+</script>
 </html>

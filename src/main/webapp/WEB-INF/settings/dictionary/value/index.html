@@ -6,6 +6,7 @@
 
     <script type="text/javascript" src="../../../jquery/jquery-1.11.1-min.js"></script>
     <script type="text/javascript" src="../../../jquery/bootstrap_3.3.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../layui/layui.js"></script>
 </head>
 <body>
 
@@ -21,17 +22,19 @@
         <button type="button" class="btn btn-primary" onclick="window.location.href='save.html'"><span
                 class="glyphicon glyphicon-plus"></span> 创建
         </button>
-        <button type="button" class="btn btn-default" onclick="window.location.href='edit.html'"><span
+        <button type="button" class="btn btn-default" onclick="toEdit()"><span
                 class="glyphicon glyphicon-edit"></span> 编辑
         </button>
-        <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-minus"></span> 删除</button>
+        <button type="button" class="btn btn-danger" id="remove-value"><span class="glyphicon glyphicon-minus"></span>
+            删除
+        </button>
     </div>
 </div>
 <div style="position: relative; left: 30px; top: 20px;">
     <table class="table table-hover">
         <thead>
         <tr style="color: #B3B3B3;">
-            <td><input type="checkbox"/></td>
+            <td><input name="qx" type="checkbox"/></td>
             <td>序号</td>
             <td>字典值</td>
             <td>文本</td>
@@ -39,50 +42,141 @@
             <td>字典类型编码</td>
         </tr>
         </thead>
-        <tbody>
-        <tr class="active">
-            <td><input type="checkbox"/></td>
-            <td>1</td>
-            <td>m</td>
-            <td>男</td>
-            <td>1</td>
-            <td>sex</td>
-        </tr>
-        <tr>
-            <td><input type="checkbox"/></td>
-            <td>2</td>
-            <td>f</td>
-            <td>女</td>
-            <td>2</td>
-            <td>sex</td>
-        </tr>
-        <tr class="active">
-            <td><input type="checkbox"/></td>
-            <td>3</td>
-            <td>1</td>
-            <td>一级部门</td>
-            <td>1</td>
-            <td>orgType</td>
-        </tr>
-        <tr>
-            <td><input type="checkbox"/></td>
-            <td>4</td>
-            <td>2</td>
-            <td>二级部门</td>
-            <td>2</td>
-            <td>orgType</td>
-        </tr>
-        <tr class="active">
-            <td><input type="checkbox"/></td>
-            <td>5</td>
-            <td>3</td>
-            <td>三级部门</td>
-            <td>3</td>
-            <td>orgType</td>
-        </tr>
+        <tbody id="value-tbody">
         </tbody>
     </table>
 </div>
+<script>
+    //定义数据字典类型值查询方法
+    function load() {
+        $.ajax({
+            url: 'queryAllDictionaryValue',
+            dataType: 'json',
+            success: function (data) {
+                if (data.code === 200) {
+                    $('#value-tbody').html('');
+                    let content = "";
+                    $.each(data.data, function (index, item) {
+                        if (index % 2 === 1) {
+                            content += '<tr class="active">';
+                        } else {
+                            content += '<tr>';
+                        }
+                        content += '<td><input name="id" type="checkbox" value="' + item.id + '"/></td>';
+                        content += '<td>' + (index + 1) + '</td>';
+                        content += '<td>' + item.value + '</td>';
+                        content += '<td>' + item.text + '</td>';
+                        content += '<td>' + item.orderNo + '</td>';
+                        content += '<td>' + item.typeCode + '</td>';
+                        content += '</tr>';
+                    })
+                    $('#value-tbody').append(content);
+                }
+            }
+        });
+    }
 
+    //获取数据字典类型值
+    load();
+
+    //定义保存URL查询参数的Map
+    const queryStringMap = new Map();
+
+    //获取URL查询参数
+    function getQueryString() {
+        //获取URL地址
+        let url = location.search.toString();
+        //判断有没有查询参数
+        if (url === '') {
+            return false;
+        }
+        //获取URL地址后面的查询参数，并转换为数组
+        let queryString = url.split('?')[1].split("&");
+        //遍历数组将参数放入Map中
+        for (let i = 0; i < queryString.length; i++) {
+            queryStringMap.set(queryString[i].split('=')[0], queryString[i].split('=')[1]);
+        }
+    }
+
+    //获取Map
+    getQueryString();
+    layui.use('layer', function () {
+        let layer = layui.layer;
+        if (queryStringMap.get('status') === 'success') {
+            layer.msg('添加成功', {icon: 1});
+            history.replaceState(null, "", '?');
+        } else if (queryStringMap.get('status') === 'error') {
+            layer.msg('添加失败', {icon: 5});
+        }
+    });
+
+    //删除字典值表
+    $('#remove-value').click(() => {
+        let ids = [];
+        //获取选择的id
+        $('input[name=id]:checked').each(function (index, item) {
+            ids.push($(item).val());
+        });
+
+        layui.use('layer', function () {
+            let layer = layui.layer;
+            if (ids.length === 0) {
+                layer.msg('请选择要删除的记录', {icon: 0});
+                return false;
+            }
+            layer.confirm('你确定要删除选定的记录吗？', function (index) {
+                $.ajax({
+                    url: 'deleteDictionaryValue',
+                    method: 'post',
+                    data: {
+                        id: ids.toString()
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.code === 200) {
+                            layer.msg('删除成功', {icon: 1});
+                            //刷新页面
+                            load();
+                        } else {
+                            layer.msg('删除失败', {icon: 5});
+                        }
+                    }
+                });
+                layer.close(index);
+            });
+        });
+    });
+
+    //全选
+    $('input[name=qx]').click(function () {
+        $('input[name=id]').prop('checked', this.checked);
+    });
+
+    //判断复选框被选中时全选框的状态
+    $('#value-tbody').on('click', $('input[name=id]'), function () {
+        $('input[name=qx]').prop('checked', $('input[name=id]').length === $('input[name=id]:checked').length);
+    });
+
+    //编辑操作
+    function toEdit() {
+        //获取选中的个数
+        let check = $('input[name=id]:checked').length;
+
+        layui.use('layer', function () {
+            let layer = layui.layer;
+            if (check > 1) {
+                layer.msg('请只选则一个选项', {icon: 0});
+            }
+            if (check === 0) {
+                layer.msg('至少选择一个选项', {icon: 0});
+            }
+        });
+        if (check === 1) {
+            let id = $('input[name=id]:checked').val();
+            location.href = 'edit.html?id=' + id;
+        }
+    }
+
+</script>
 </body>
 </html>

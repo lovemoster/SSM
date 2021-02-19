@@ -15,7 +15,7 @@
 <div style="position:  relative; left: 30px;">
     <h3>新增字典值</h3>
     <div style="position: relative; top: -40px; left: 70%;">
-        <button type="button" class="btn btn-primary">保存</button>
+        <button type="button" class="btn btn-primary" id="create-save">保存</button>
         <button type="button" class="btn btn-default" onclick="window.history.back();">取消</button>
     </div>
     <hr style="position: relative; top: -40px;">
@@ -26,9 +26,7 @@
         <label for="create-dicTypeCode" class="col-sm-2 control-label">字典类型编码<span style="font-size: 15px; color: red;">*</span></label>
         <div class="col-sm-10" style="width: 300px;">
             <select class="form-control" id="create-dicTypeCode" style="width: 200%;">
-                <option></option>
-                <option>性别</option>
-                <option>机构类型</option>
+
             </select>
         </div>
     </div>
@@ -51,11 +49,75 @@
     <div class="form-group">
         <label for="create-orderNo" class="col-sm-2 control-label">排序号</label>
         <div class="col-sm-10" style="width: 300px;">
-            <input type="text" class="form-control" id="create-orderNo" style="width: 200%;">
+            <input type="text" class="form-control" id="create-orderNo" style="width: 200%;" readonly>
         </div>
     </div>
 </form>
 
 <div style="height: 200px;"></div>
 </body>
+<script>
+    //查询字典类型
+    $.ajax({
+        url: '../type/queryAllDictionaryType',
+        method: 'get',
+        dataType: 'json',
+        success: function (data) {
+            if (data.code === 200) {
+                let content = "";
+                $.each(data.data, function (index, item) {
+                    if (index === 0) {
+                        content += '<option value="' + item.code + '" selected>' + item.name + '</option>';
+                    } else {
+                        content += '<option value="' + item.code + '">' + item.name + '</option>';
+                    }
+                });
+                $('#create-dicTypeCode').append(content);
+            }
+            load();
+        }
+    });
+
+    function load() {
+        $.ajax({
+            url: 'queryDictionaryValueOrderNo',
+            method: 'get',
+            dataType: 'json',
+            data: {
+                typeCode: $('option:checked').val()
+            },
+            success: function (data) {
+                if (data.code === 200) {
+                    $('#create-orderNo').val(data.orderNo);
+                }
+            }
+        });
+    }
+
+    $('#create-dicTypeCode').change(function () {
+        load();
+    })
+
+    //添加字典表值
+    $('#create-save').click(() => {
+        $.ajax({
+            url: 'addDictionaryValue',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                typeCode: $('#create-dicTypeCode').val(),
+                value: $('#create-dicValue').val(),
+                text: $('#create-text').val(),
+                orderNo: $('#create-orderNo').val()
+            },
+            success: function (data) {
+                if (data.code === 200) {
+                    window.location.href = 'index.html?status=success';
+                } else {
+                    window.location.href = 'index.html?status=error';
+                }
+            }
+        });
+    })
+</script>
 </html>

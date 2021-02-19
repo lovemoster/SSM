@@ -23,4 +23,6 @@ public interface UserMapper {
     User login(User user);
 
     List<User> selectAllUsers();
+
+    List<User> selectUserByLikeName(String owner);
 }
