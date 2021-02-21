@@ -1,5 +1,7 @@
 package cn.syned.crm.workbench.controller;
 
+import cn.syned.crm.commons.exception.ClueException;
+import cn.syned.crm.commons.message.ClueMessage;
 import cn.syned.crm.commons.vo.ClueVo;
 import cn.syned.crm.workbench.entity.Clue;
 import cn.syned.crm.workbench.entity.Tran;
@@ -43,7 +45,15 @@ public class ClueController {
                               @RequestParam(name = "flag") Boolean flag,
                               HttpSession session,
                               Tran tran) {
-        ClueVo clueVo = clueService.convertClue(tran, id, flag, session);
+        ClueVo clueVo = new ClueVo();
+        try {
+            clueService.convertClue(tran, id, flag, session);
+            clueVo.setCode(ClueMessage.CLUE_MESSAGE_SUCCESS.getCode());
+            clueVo.setMessage(ClueMessage.CLUE_MESSAGE_SUCCESS.getMessage());
+        } catch (ClueException e) {
+            clueVo.setCode(e.getCode());
+            clueVo.setMessage(e.getMessage());
+        }
         return clueVo;
     }
 }

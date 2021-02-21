@@ -33,7 +33,7 @@
     <select id="selectCustomerByName" resultType="cn.syned.crm.workbench.entity.Customer">
         select
         <include refid="Base_Column_List"/>
-        from tbl_customer where tbl_customer.name = #{name}
+        from tbl_customer where tbl_customer.name like '%' #{name} '%'
     </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.String">

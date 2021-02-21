@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.syned.crm.workbench.mapper.ChartMapper">
+
+    <select id="queryTransactionChart" resultType="cn.syned.crm.workbench.entity.Chart">
+        select count(tbl_tran.id) as `value`,
+               tbl_dic_value.text as `name`
+        from tbl_tran
+                 left join tbl_dic_value
+                           on tbl_tran.stage = tbl_dic_value.id
+        group by tbl_tran.stage;
+    </select>
+
+</mapper>

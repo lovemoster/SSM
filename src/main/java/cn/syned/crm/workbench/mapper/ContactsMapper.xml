@@ -35,6 +35,11 @@
         from tbl_contacts
         where id = #{id,jdbcType=CHAR}
     </select>
+    <select id="selectCustomerByName" resultType="cn.syned.crm.workbench.entity.Contacts">
+        select
+        <include refid="Base_Column_List"/>
+        from tbl_contacts where tbl_contacts.fullname like '%' #{name} '%'
+    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
         <!--@mbg.generated-->
         delete from tbl_contacts

@@ -1,5 +1,6 @@
 package cn.syned.crm.workbench.service;
 
+import cn.syned.crm.commons.exception.ClueException;
 import cn.syned.crm.commons.vo.ClueVo;
 import cn.syned.crm.workbench.entity.Clue;
 import cn.syned.crm.workbench.entity.Tran;
@@ -11,5 +12,5 @@ public interface ClueService {
 
     ClueVo queryClueById(String id);
 
-    ClueVo convertClue(Tran tran, String id, Boolean flag, HttpSession session);
+    void convertClue(Tran tran, String id, Boolean flag, HttpSession session) throws ClueException;
 }

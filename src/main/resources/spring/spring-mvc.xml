@@ -24,21 +24,21 @@
         </mvc:message-converters>
     </mvc:annotation-driven>
 
-    <!--    <mvc:interceptors>-->
-    <!--        <mvc:interceptor>-->
-    <!--            <mvc:mapping path="/workbench/**"/>-->
-    <!--            <bean class="cn.syned.crm.commons.interceptor.UserInterceptor"/>-->
-    <!--        </mvc:interceptor>-->
-    <!--        <mvc:interceptor>-->
-    <!--            <mvc:mapping path="/user/queryAllUsers"/>-->
-    <!--            <mvc:mapping path="/js/**"/>-->
-    <!--            <bean class="cn.syned.crm.commons.interceptor.UserInterceptor"/>-->
-    <!--        </mvc:interceptor>-->
-    <!--        <mvc:interceptor>-->
-    <!--            <mvc:mapping path="/settings/**"/>-->
-    <!--            <bean class="cn.syned.crm.commons.interceptor.UserInterceptor"/>-->
-    <!--        </mvc:interceptor>-->
-    <!--    </mvc:interceptors>-->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/workbench/**"/>
+            <bean class="cn.syned.crm.commons.interceptor.UserInterceptor"/>
+        </mvc:interceptor>
+        <mvc:interceptor>
+            <mvc:mapping path="/user/queryAllUsers"/>
+            <mvc:mapping path="/js/**"/>
+            <bean class="cn.syned.crm.commons.interceptor.UserInterceptor"/>
+        </mvc:interceptor>
+        <mvc:interceptor>
+            <mvc:mapping path="/settings/**"/>
+            <bean class="cn.syned.crm.commons.interceptor.UserInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
 
     <mvc:default-servlet-handler/>
 

@@ -3,6 +3,8 @@ package cn.syned.crm.workbench.service.impl;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
+import cn.syned.crm.commons.exception.ClueException;
+import cn.syned.crm.commons.message.ClueMessage;
 import cn.syned.crm.commons.vo.ClueVo;
 import cn.syned.crm.settings.entity.User;
 import cn.syned.crm.settings.mapper.UserMapper;
@@ -148,7 +150,7 @@ public class ClueServiceImpl implements ClueService {
      * @return 市场活动线索对象
      */
     @Override
-    public ClueVo convertClue(Tran tran, String id, Boolean flag, HttpSession session) {
+    public void convertClue(Tran tran, String id, Boolean flag, HttpSession session) throws ClueException {
         //查询此线索的详情
         Clue clue = clueMapper.selectByPrimaryKey(id);
 
@@ -172,8 +174,11 @@ public class ClueServiceImpl implements ClueService {
             customer.setNextContactTime(clue.getNextContactTime());
             customer.setDescription(clue.getDescription());
             customer.setAddress(clue.getAddress());
-            customerMapper.insertSelective(customer);
+            int count = customerMapper.insertSelective(customer);
             //判断客户是否创建成功
+            if (count != 1) {
+                throw new ClueException(ClueMessage.CLUE_MESSAGE_CREATE_CUSTOMER_FAILED);
+            }
         } else {
             customer = customerList.get(0);
         }
@@ -196,7 +201,10 @@ public class ClueServiceImpl implements ClueService {
         contacts.setNextContactTime(clue.getNextContactTime());
         contacts.setAddress(clue.getAddress());
 
-        contactsMapper.insertSelective(contacts);
+        int contacts_count = contactsMapper.insertSelective(contacts);
+        if (contacts_count != 1) {
+            throw new ClueException(ClueMessage.CLUE_MESSAGE_CREATE_CONTACTS_FAILED);
+        }
 
         //判断是否为用户创建交易
         if (flag) {
@@ -210,10 +218,12 @@ public class ClueServiceImpl implements ClueService {
             tran.setDescription(clue.getDescription());
             tran.setContactSummary(clue.getContactSummary());
             tran.setNextContactTime(clue.getNextContactTime());
-            int count = tranMapper.insertSelective(tran);
+            int tran_count = tranMapper.insertSelective(tran);
+            if (tran_count != 1) {
+                throw new ClueException(ClueMessage.CLUE_MESSAGE_CREATE_TRAN_FAILED);
+            }
         }
 
-        return null;
     }
 
 }

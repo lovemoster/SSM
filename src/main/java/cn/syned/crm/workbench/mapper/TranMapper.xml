@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.syned.crm.workbench.mapper.TranMapper">
+
     <resultMap id="BaseResultMap" type="cn.syned.crm.workbench.entity.Tran">
         <!--@mbg.generated-->
         <id column="id" jdbcType="CHAR" property="id"/>
@@ -22,24 +23,130 @@
         <result column="contactSummary" jdbcType="VARCHAR" property="contactSummary"/>
         <result column="nextContactTime" jdbcType="CHAR" property="nextContactTime"/>
     </resultMap>
+
     <sql id="Base_Column_List">
         <!--@mbg.generated-->
         id, `owner`, money, `name`, expectedDate, customerId, stage, `type`, `source`, activityId,
         contactsId, createBy, createTime, editBy, editTime, description, contactSummary,
         nextContactTime
     </sql>
+
+    <!--    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">-->
+    <!--        &lt;!&ndash;@mbg.generated&ndash;&gt;-->
+    <!--        select-->
+    <!--        <include refid="Base_Column_List"/>-->
+    <!--        from tbl_tran-->
+    <!--        where id = #{id,jdbcType=CHAR}-->
+    <!--    </select>-->
     <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
-        <!--@mbg.generated-->
-        select
-        <include refid="Base_Column_List"/>
+        select tbl_tran.id,
+        tbl_tran.owner,
+        tbl_tran.money,
+        tbl_tran.name,
+        tbl_tran.expectedDate,
+        d.name as customerId,
+        a.text as stage,
+        b.text as type,
+        c.text as source,
+        f.name as activityId,
+        e.fullname as contactsId,
+        g.name as createBy,
+        tbl_tran.createTime,
+        tbl_tran.editBy,
+        tbl_tran.editTime,
+        tbl_tran.description,
+        tbl_tran.contactSummary,
+        tbl_tran.nextContactTime,
+        tbl_tran.possibility
         from tbl_tran
-        where id = #{id,jdbcType=CHAR}
+        left join tbl_dic_value as a
+        on tbl_tran.stage = a.id
+        left join tbl_dic_value as b
+        on tbl_tran.type = b.id
+        left join tbl_dic_value as c
+        on tbl_tran.source = c.id
+        left join tbl_customer as d
+        on tbl_tran.customerId = d.id
+        left join tbl_contacts as e
+        on tbl_tran.contactsId = e.id
+        left join tbl_activity as f
+        on tbl_tran.activityId = f.id
+        left join tbl_user as g
+        on tbl_tran.createBy = g.id
+        <where>
+            <if test="id != null and id != ''">
+                and tbl_tran.id like '%' #{id} '%'
+            </if>
+        </where>
     </select>
+
+    <select id="selectTranList" resultType="cn.syned.crm.workbench.entity.Tran">
+        select tbl_tran.id,
+        tbl_tran.owner,
+        tbl_tran.money,
+        tbl_tran.name,
+        tbl_tran.expectedDate,
+        d.name as customerId,
+        a.text as stage,
+        b.text as type,
+        c.text as source,
+        tbl_tran.activityId,
+        e.fullname as contactsId,
+        tbl_tran.createBy,
+        tbl_tran.createTime,
+        tbl_tran.editBy,
+        tbl_tran.editTime,
+        tbl_tran.description,
+        tbl_tran.contactSummary,
+        tbl_tran.nextContactTime
+        from tbl_tran
+        left join tbl_dic_value as a
+        on tbl_tran.stage = a.id
+        left join tbl_dic_value as b
+        on tbl_tran.type = b.id
+        left join tbl_dic_value as c
+        on tbl_tran.source = c.id
+        left join tbl_customer as d
+        on tbl_tran.customerId = d.id
+        left join tbl_contacts as e
+        on tbl_tran.contactsId = e.id
+        <where>
+            <if test="tran.owner != null and tran.owner != ''">
+                and tbl_tran.owner like '%' #{tran.owner} '%'
+            </if>
+            <if test="tran.name != null and tran.name != ''">
+                and tbl_tran.name like '%' #{tran.name} '%'
+            </if>
+            <if test="customerIdList != null">
+                and tbl_tran.customerId in
+                <foreach collection="customerIdList" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="tran.stage != null and tran.stage != ''">
+                and tbl_tran.stage = #{tran.stage}
+            </if>
+            <if test="tran.type != null and tran.type != ''">
+                and tbl_tran.type = #{tran.type}
+            </if>
+            <if test="tran.source != null and tran.source != ''">
+                and tbl_tran.source = #{tran.source}
+            </if>
+            <if test="contactsIdList != null">
+                and tbl_tran.contactsId in
+                <foreach collection="contactsIdList" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
         <!--@mbg.generated-->
         delete from tbl_tran
         where id = #{id,jdbcType=CHAR}
     </delete>
+
     <insert id="insert" keyColumn="id" keyProperty="id" parameterType="cn.syned.crm.workbench.entity.Tran"
             useGeneratedKeys="true">
         <!--@mbg.generated-->
@@ -174,6 +281,7 @@
             </if>
         </trim>
     </insert>
+
     <update id="updateByPrimaryKeySelective" parameterType="cn.syned.crm.workbench.entity.Tran">
         <!--@mbg.generated-->
         update tbl_tran
@@ -229,9 +337,13 @@
             <if test="nextContactTime != null">
                 nextContactTime = #{nextContactTime,jdbcType=CHAR},
             </if>
+            <if test="possibility != null and possibility != ''">
+                possibility = #{possibility,jdbcType=CHAR},
+            </if>
         </set>
         where id = #{id,jdbcType=CHAR}
     </update>
+
     <update id="updateByPrimaryKey" parameterType="cn.syned.crm.workbench.entity.Tran">
         <!--@mbg.generated-->
         update tbl_tran

@@ -76,7 +76,6 @@ function loadInfo() {
                 //填充模态框数据
                 $('#edit-id').val(item.id);
                 $('#edit-marketActivityOwner option').each((index, user) => {
-                    console.log(item.owner);
                     if ($(user).text() === item.owner) {
                         $(user).prop('selected', true);
                     }
